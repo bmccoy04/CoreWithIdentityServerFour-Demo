@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  identityserverdemo.server:
+    image: identityserverdemo.server
+    build: .
+    ports:
+      - 5000:5000
