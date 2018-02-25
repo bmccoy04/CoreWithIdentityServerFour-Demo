@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using IdentityServer4.AccessTokenValidation;
 
 namespace IdentityServerDemo.Api
 {
@@ -20,13 +21,25 @@ namespace IdentityServerDemo.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvcCore()
+                .AddAuthorization()
+                .AddJsonFormatters();
+
+            services.AddAuthentication("Bearer")
+                .AddIdentityServerAuthentication(options =>
+                {
+                    // Endpoint to look at to validate token
+                    options.Authority = "http://localhost:5000";
+                    // Says if discovery endpoint requires https 
+                    options.RequireHttpsMetadata = false;
+                    // Names our api for others to request access to
+                    options.ApiName = "IdentityApi";
+                });
+                
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
@@ -34,6 +47,8 @@ namespace IdentityServerDemo.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            // Tells our endpoint to use the configured authentication
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
