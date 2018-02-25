@@ -13,6 +13,30 @@ namespace IdentityServerDemo.Server
         {
             return new List<Client>
             {
+                new Client()
+                {
+                    ClientId = "ClientSecret",
+                    
+                    // How we are allowed to authenticate. This will use
+                    // a client secret that we provide, not user accounts.  
+                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    
+                    // This is the secret our clients will use to connect to 
+                    // out web api.
+                    ClientSecrets = 
+                    {
+                        new Secret("clientSecret".Sha256())
+                    },
+                    
+                    // These are the "Scopes" or resources the clients w/
+                    // this secret are allowed to access.
+                    AllowedScopes = { "IdentityApi" },
+
+                    // Any additional claims you want to add
+                    Claims = {
+                        new Claim("Demo", ".Net User Group demo")
+                    }
+                }
 
             };
         }
