@@ -21,7 +21,7 @@ namespace IdentityServerDemo.Server
         {
             return new List<ApiResource>
             {
-
+                new ApiResource("IdentityApi", "My IdentityApi")
             };
         }
 
