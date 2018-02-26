@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using IdentityServerDemo.Mvc.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace IdentityServerDemo.Mvc.Controllers
 {
@@ -27,6 +29,20 @@ namespace IdentityServerDemo.Mvc.Controllers
             ViewData["Message"] = "Your contact page.";
 
             return View();
+        }
+
+        [Authorize]
+        public IActionResult Secret()
+        {
+            ViewData["Message"] = "Don't tell anyone!";
+
+            return View();
+        }
+
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync("Cookies");
+            await HttpContext.SignOutAsync("oidc");
         }
 
         public IActionResult Error()

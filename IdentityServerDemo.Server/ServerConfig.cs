@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.Models;
 using IdentityServer4.Test;
 
@@ -24,7 +25,7 @@ namespace IdentityServerDemo.Server
                     
                     // This is the secret our clients will use to connect to 
                     // out web api.
-                    ClientSecrets = 
+                    ClientSecrets =
                     {
                         new Secret("clientSecret".Sha256())
                     },
@@ -47,13 +48,41 @@ namespace IdentityServerDemo.Server
                     
                    // This is the secret our clients will use to connect to 
                    // out web api.
-                   ClientSecrets = 
+                   ClientSecrets =
                    {
                        new Secret("clientPassword".Sha256())
                    },
 
                    AllowedScopes = { IdentityApi }
+                },
+                // OpenID Connect implicit flow client (MVC)
+                new Client
+                {
+                    ClientId = "MVC",
+                    ClientName = "MVC Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+
+                    // where to redirect to after login
+                    RedirectUris = { "http://localhost:5002/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    }
                 }
+            };
+        }
+
+        public IEnumerable<IdentityResource> GetIdentityResources()
+        {
+            return new List<IdentityResource>
+            {
+                new IdentityResources.OpenId(),
+                new IdentityResources.Profile(),
             };
         }
 
@@ -71,8 +100,8 @@ namespace IdentityServerDemo.Server
             {
                 new TestUser
                 {
-                    SubjectId = "818727", 
-                    Username = "alice", 
+                    SubjectId = "818727",
+                    Username = "alice",
                     Password = "alice",
                     Claims =
                     {
@@ -87,8 +116,8 @@ namespace IdentityServerDemo.Server
                 },
                 new TestUser
                 {
-                    SubjectId = "88421113", 
-                    Username = "bob", 
+                    SubjectId = "88421113",
+                    Username = "bob",
                     Password = "bob",
                     Claims =
                     {
