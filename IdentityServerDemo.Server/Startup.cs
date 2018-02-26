@@ -26,6 +26,7 @@ namespace IdentityServerDemo.Server
                 .AddInMemoryApiResources(_serverConfig.GetApiResources())
                 .AddTestUsers(_serverConfig.GetUsers().ToList());
 
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -36,7 +37,11 @@ namespace IdentityServerDemo.Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
+
             app.UseIdentityServer();
+
+            app.UseMvcWithDefaultRoute();
 
         }
     }
