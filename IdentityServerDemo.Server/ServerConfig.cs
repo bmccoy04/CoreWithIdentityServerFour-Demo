@@ -9,6 +9,7 @@ namespace IdentityServerDemo.Server
 {
     public class ServerConfig
     {
+        public const string IdentityApi = "IdentityApi";
         public IEnumerable<Client> GetClients()
         {
             return new List<Client>
@@ -30,14 +31,29 @@ namespace IdentityServerDemo.Server
                     
                     // These are the "Scopes" or resources the clients w/
                     // this secret are allowed to access.
-                    AllowedScopes = { "IdentityApi" },
+                    AllowedScopes = { IdentityApi },
 
                     // Any additional claims you want to add
                     Claims = {
                         new Claim("Demo", ".Net User Group demo")
                     }
-                }
+                },
+                new Client
+                {
+                   ClientId = "ClientPassword",
 
+                   // User account will be provided to access resources
+                   AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    
+                   // This is the secret our clients will use to connect to 
+                   // out web api.
+                   ClientSecrets = 
+                   {
+                       new Secret("clientPassword".Sha256())
+                   },
+
+                   AllowedScopes = { IdentityApi }
+                }
             };
         }
 
@@ -49,7 +65,7 @@ namespace IdentityServerDemo.Server
             };
         }
 
-        public static IEnumerable<TestUser> GetUsers()
+        public IEnumerable<TestUser> GetUsers()
         {
             return new List<TestUser>
             {
