@@ -13,7 +13,8 @@ namespace IdentityServerDemo.Server
     public class Startup
     {
         private ServerConfig _serverConfig;
-        public Startup() {
+        public Startup()
+        {
             _serverConfig = new ServerConfig();
         }
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -27,6 +28,14 @@ namespace IdentityServerDemo.Server
                 .AddInMemoryApiResources(_serverConfig.GetApiResources())
                 .AddTestUsers(_serverConfig.GetUsers().ToList());
 
+            services.AddAuthentication()
+                .AddGoogle("Google", options =>
+                {
+                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+
+                    options.ClientId = "537114340738-41u5e7rkfa6e4qupn965h1llt0f0rmgf.apps.googleusercontent.com";
+                    options.ClientSecret = "gRX4-NSH_yjnpQQeWKX6X54y";
+                });
             services.AddMvc();
         }
 
