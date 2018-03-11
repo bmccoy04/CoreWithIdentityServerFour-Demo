@@ -37,7 +37,17 @@ namespace IdentityServerDemo.Api
                     // Names our api for others to request access to
                     options.ApiName = "IdentityApi";
                 });
-                
+
+            services.AddCors(options =>
+            {
+                // this defines a CORS policy called "default"
+                options.AddPolicy("default", policy =>
+                {
+                     policy.WithOrigins("http://localhost:5004")
+                         .AllowAnyHeader()
+                         .AllowAnyMethod();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -48,6 +58,7 @@ namespace IdentityServerDemo.Api
             }
 
             // Tells our endpoint to use the configured authentication
+            app.UseCors("default");
             app.UseAuthentication();
             app.UseMvc();
         }

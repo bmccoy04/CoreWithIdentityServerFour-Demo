@@ -20,7 +20,7 @@ namespace IdentityServerDemo.Javascript
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://localhost:5003/")
+                .UseUrls("http://localhost:5004/")
                 .Build();
     }
 }
