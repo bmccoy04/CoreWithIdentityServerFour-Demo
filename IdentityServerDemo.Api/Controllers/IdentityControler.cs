@@ -12,6 +12,7 @@ namespace IdentityServerDemo.Api.Controllers
     public class IdentityController : Controller
     {
         // GET api/values
+        // [Authorize("MyPolicy")]
         [HttpGet]
         public IActionResult Get()
         {

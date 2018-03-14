@@ -37,6 +37,10 @@ namespace IdentityServerDemo.Api
                     // Names our api for others to request access to
                     options.ApiName = "IdentityApi";
                 });
+            
+            services.AddAuthorization(options => {
+                options.AddPolicy("MyPolicy", policy => policy.RequireClaim("Permission", "canview"));
+            });
 
             services.AddCors(options =>
             {
